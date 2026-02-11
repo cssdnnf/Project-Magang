@@ -16,18 +16,23 @@ class Employees extends CI_Controller {
         $data['title'] = 'Employees List';
         $data['user'] = $this->db->get_where('users', ['email' => $this->session->userdata('email')])->row_array();
         $data['employees'] = $this->Employee_model->get_all_employees();
-
         $this->load->view('employees/index', $data);
     }
 
     public function add() {
+        // [PROTEKSI] Redirect jika role adalah user
+        if ($this->session->userdata('role') == 'user') {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki izin untuk menambah data!</div>');
+            redirect('employees');
+        }
+
         $data['title'] = 'Create Employee';
         $data['user'] = $this->db->get_where('users', ['email' => $this->session->userdata('email')])->row_array();
 
         $this->form_validation->set_rules('nip', 'NIP', 'required|trim|is_unique[employees.nip]');
         $this->form_validation->set_rules('name', 'Full Name', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email');
-        $this->form_validation->set_rules('phone', 'Phone', 'required|numeric');
+        $this->form_validation->set_rules('phone', 'Phone Number', 'required|numeric');
         $this->form_validation->set_rules('position', 'Position', 'required|trim');
         $this->form_validation->set_rules('hire_date', 'Hire Date', 'required');
 
@@ -35,23 +40,29 @@ class Employees extends CI_Controller {
             $this->load->view('employees/add', $data);
         } else {
             $data_insert = [
-                'nip'       => $this->input->post('nip', true),
-                'name'      => $this->input->post('name', true),
-                'email'     => $this->input->post('email', true),
-                'phone'     => $this->input->post('phone', true),
-                'position'  => $this->input->post('position', true),
-                'division'  => $this->input->post('division', true),
-                'hire_date' => $this->input->post('hire_date', true),
-                'address'   => $this->input->post('address', true),
+                'nip'       => htmlspecialchars($this->input->post('nip', true)),
+                'name'      => htmlspecialchars($this->input->post('name', true)),
+                'email'     => htmlspecialchars($this->input->post('email', true)),
+                'phone'     => htmlspecialchars($this->input->post('phone', true)),
+                'position'  => htmlspecialchars($this->input->post('position', true)),
+                'division'  => htmlspecialchars($this->input->post('division', true)),
+                'hire_date' => $this->input->post('hire_date'),
+                'address'   => htmlspecialchars($this->input->post('address', true)),
                 'created_at'=> date('Y-m-d H:i:s')
             ];
             $this->Employee_model->insert_employee($data_insert);
-            $this->session->set_flashdata('message', '<div class="alert alert-success">Employee created successfully!</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-success">Karyawan berhasil ditambahkan!</div>');
             redirect('employees');
         }
     }
 
     public function edit($id) {
+        // [PROTEKSI] Redirect jika role adalah user
+        if ($this->session->userdata('role') == 'user') {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki izin untuk mengedit data!</div>');
+            redirect('employees');
+        }
+
         $data['title'] = 'Edit Employee';
         $data['user'] = $this->db->get_where('users', ['email' => $this->session->userdata('email')])->row_array();
         $data['emp'] = $this->Employee_model->get_employee_by_id($id);
@@ -60,31 +71,36 @@ class Employees extends CI_Controller {
 
         $this->form_validation->set_rules('name', 'Full Name', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email');
+        $this->form_validation->set_rules('position', 'Position', 'required|trim');
 
         if ($this->form_validation->run() == false) {
             $this->load->view('employees/edit', $data);
         } else {
             $data_update = [
-                'name'      => $this->input->post('name', true),
-                'email'     => $this->input->post('email', true),
-                'phone'     => $this->input->post('phone', true),
-                'position'  => $this->input->post('position', true),
-                'division'  => $this->input->post('division', true),
-                'hire_date' => $this->input->post('hire_date', true),
-                'address'   => $this->input->post('address', true),
+                'name'      => htmlspecialchars($this->input->post('name', true)),
+                'email'     => htmlspecialchars($this->input->post('email', true)),
+                'phone'     => htmlspecialchars($this->input->post('phone', true)),
+                'position'  => htmlspecialchars($this->input->post('position', true)),
+                'division'  => htmlspecialchars($this->input->post('division', true)),
+                'hire_date' => $this->input->post('hire_date'),
+                'address'   => htmlspecialchars($this->input->post('address', true)),
             ];
             $this->Employee_model->update_employee($id, $data_update);
-            $this->session->set_flashdata('message', '<div class="alert alert-success">Employee updated successfully!</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-success">Data karyawan berhasil diperbarui!</div>');
             redirect('employees');
         }
     }
 
     public function delete($id) {
-        if($this->session->userdata('role') != 'admin'){
+        // [PROTEKSI] Redirect jika role BUKAN admin (User & Staff tidak boleh hapus)
+        // Atau jika hanya User yg dilarang: if ($this->session->userdata('role') == 'user')
+        if ($this->session->userdata('role') != 'admin') {
+             $this->session->set_flashdata('message', '<div class="alert alert-danger">Akses Ditolak! Hanya Admin yang boleh menghapus.</div>');
              redirect('employees');
         }
+
         $this->Employee_model->delete_employee($id);
-        $this->session->set_flashdata('message', '<div class="alert alert-success">Employee deleted!</div>');
+        $this->session->set_flashdata('message', '<div class="alert alert-success">Data karyawan telah dihapus.</div>');
         redirect('employees');
     }
 }
