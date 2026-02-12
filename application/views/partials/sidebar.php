@@ -17,6 +17,21 @@
                     </a>
                 </li>
 
+                <li class="nxl-item nxl-hasmenu <?= ($this->uri->segment(1) == 'pembelian') ? 'active open' : ''; ?>">
+                    <a href="javascript:void(0);" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-shopping-cart"></i></span>
+                        <span class="nxl-mtext">Pembelian</span><span class="nxl-arrow"><i class="feather-chevron-right"></i></span>
+                    </a>
+                    <ul class="nxl-submenu">
+                        <li class="nxl-item"><a class="nxl-link <?= ($this->uri->segment(2) == 'daftar' || $this->uri->segment(2) == '') ? 'active' : ''; ?>" href="<?= base_url('pembelian/daftar'); ?>">Daftar Pembelian</a></li>
+                        <li class="nxl-item"><a class="nxl-link <?= ($this->uri->segment(2) == 'permintaan') ? 'active' : ''; ?>" href="<?= base_url('pembelian/permintaan'); ?>">Permintaan Pembelian</a></li>
+                        <li class="nxl-item"><a class="nxl-link <?= ($this->uri->segment(2) == 'penawaran') ? 'active' : ''; ?>" href="<?= base_url('pembelian/penawaran'); ?>">Penawaran Pembelian</a></li>
+                        <li class="nxl-item"><a class="nxl-link <?= ($this->uri->segment(2) == 'pemesanan') ? 'active' : ''; ?>" href="<?= base_url('pembelian/pemesanan'); ?>">Pemesanan Pembelian</a></li>
+                        <li class="nxl-item"><a class="nxl-link <?= ($this->uri->segment(2) == 'faktur') ? 'active' : ''; ?>" href="<?= base_url('pembelian/faktur'); ?>">Faktur Pembelian</a></li>
+                        <li class="nxl-item"><a class="nxl-link <?= ($this->uri->segment(2) == 'tukar_faktur') ? 'active' : ''; ?>" href="<?= base_url('pembelian/tukar_faktur'); ?>">Tukar Faktur</a></li>
+                    </ul>
+                </li>
+
                 <li class="nxl-item <?= ($this->uri->segment(1) == 'projects') ? 'active' : ''; ?>">
                     <a href="<?= base_url('projects'); ?>" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-layers"></i></span>
