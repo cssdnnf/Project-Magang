@@ -64,7 +64,7 @@
                         <div class="card stretch stretch-full">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div><div class="fs-12 text-muted mb-1">Total Budget</div><div class="fs-20 fw-bold text-dark">$<?= number_format($stats['budget'], 0, ',', '.'); ?></div></div>
+                                    <div><div class="fs-12 text-muted mb-1">Total Budget</div><div class="fs-20 fw-bold text-dark">Rp <?= number_format($stats['budget'], 0, ',', '.'); ?></div></div>
                                     <div class="avatar-text avatar-lg bg-soft-info text-info border-soft-info rounded"><i class="feather-dollar-sign"></i></div>
                                 </div>
                             </div>
@@ -123,7 +123,7 @@
                                         <td>
                                             <div class="fs-12"><?= date('d M', strtotime($p['start_date'])); ?> - <?= date('d M, Y', strtotime($p['end_date'])); ?></div>
                                         </td>
-                                        <td>$<?= number_format($p['budget']); ?></td>
+                                        <td>Rp. <?= number_format($p['budget']); ?></td>
                                         <td>
                                             <?php 
                                             $badge = 'bg-soft-warning text-warning';

@@ -64,7 +64,7 @@
                                     <div class="col-sm-6">
                                         <div class="p-3 border rounded">
                                             <span class="fs-12 text-muted">Budget</span>
-                                            <h6 class="fw-bold mb-0 mt-1 text-success">$<?= number_format($project['budget']); ?></h6>
+                                            <h6 class="fw-bold mb-0 mt-1 text-success">Rp. <?= number_format($project['budget']); ?></h6>
                                         </div>
                                     </div>
                                 </div>

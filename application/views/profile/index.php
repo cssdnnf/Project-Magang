@@ -35,7 +35,7 @@
                         <div class="card stretch stretch-full">
                             <div class="card-body text-center">
                                 <div class="mb-4">
-                                    <img src="<?= base_url('assets/images/avatar/undefined.png'); ?>" alt="" class="img-fluid rounded-circle" width="100">
+                                    <img src="<?= base_url('assets/images/avatar/1.png'); ?>" alt="" class="img-fluid rounded-circle" width="100">
                                 </div>
                                 <h5 class="mb-1"><?= $user['username']; ?></h5>
                                 <p class="text-muted"><?= $user['email']; ?></p>

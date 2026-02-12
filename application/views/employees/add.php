@@ -75,15 +75,14 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="row mb-4">
-                                        <div class="col-md-6">
-                                            <label class="form-label">Status</label>
-                                            <select class="form-control" name="status">
-                                                <option value="Active" <?= $emp['status'] == 'Active' ? 'selected' : ''; ?>>Active</option>
-                                                <option value="Inactive" <?= $emp['status'] == 'Inactive' ? 'selected' : ''; ?>>Inactive</option>
-                                                <option value="Resigned" <?= $emp['status'] == 'Resigned' ? 'selected' : ''; ?>>Resigned</option>
-                                            </select>
-                                        </div>
+                                    <div class="form-group mb-4">
+                                        <label class="form-label">Employee Status <span class="text-danger">*</span></label>
+                                        <select class="form-control" name="status">
+                                            <option value="Active" selected>Active</option>
+                                            <option value="Inactive">Inactive</option>
+                                            <option value="Resigned">Resigned</option>
+                                        </select>
+                                        <?= form_error('status', '<small class="text-danger">', '</small>'); ?>
                                     </div>
                                     <div class="mb-4">
                                         <label class="form-label">Hire Date</label>

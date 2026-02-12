@@ -39,25 +39,36 @@ class Employees extends CI_Controller {
     }
 
     public function add() {
-        // [PROTEKSI] Redirect jika role adalah user
+        // Proteksi Role User
         if ($this->session->userdata('role') == 'user') {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki izin untuk menambah data!</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-danger">Anda tidak memiliki izin!</div>');
             redirect('employees');
         }
 
         $data['title'] = 'Create Employee';
         $data['user'] = $this->db->get_where('users', ['email' => $this->session->userdata('email')])->row_array();
 
-        $this->form_validation->set_rules('nip', 'NIP', 'required|trim|is_unique[employees.nip]');
+        // Rules Validasi
+        $this->form_validation->set_rules('nip', 'NIP', 'required|trim|is_unique[employees.nip]', [
+            'is_unique' => 'NIP ini sudah digunakan!'
+        ]);
         $this->form_validation->set_rules('name', 'Full Name', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email');
         $this->form_validation->set_rules('phone', 'Phone Number', 'required|numeric');
         $this->form_validation->set_rules('position', 'Position', 'required|trim');
         $this->form_validation->set_rules('hire_date', 'Hire Date', 'required');
+        
+        // [PERBAIKAN 1] Tambahkan validasi untuk status
+        $this->form_validation->set_rules('status', 'Status', 'required');
 
         if ($this->form_validation->run() == false) {
             $this->load->view('employees/add', $data);
         } else {
+            // [PERBAIKAN 2] Tangkap input status
+            // Jika form disabled di hack/bypass, kita default ke 'Active' jika kosong
+            $status_input = $this->input->post('status', true);
+            $final_status = !empty($status_input) ? $status_input : 'Active';
+
             $data_insert = [
                 'nip'       => htmlspecialchars($this->input->post('nip', true)),
                 'name'      => htmlspecialchars($this->input->post('name', true)),
@@ -65,11 +76,12 @@ class Employees extends CI_Controller {
                 'phone'     => htmlspecialchars($this->input->post('phone', true)),
                 'position'  => htmlspecialchars($this->input->post('position', true)),
                 'division'  => htmlspecialchars($this->input->post('division', true)),
+                'status'    => $final_status, // <--- Data Status Masuk Sini
                 'hire_date' => $this->input->post('hire_date'),
                 'address'   => htmlspecialchars($this->input->post('address', true)),
-                'status'    => $this->input->post('status'),
                 'created_at'=> date('Y-m-d H:i:s')
             ];
+
             $this->Employee_model->insert_employee($data_insert);
             $this->session->set_flashdata('message', '<div class="alert alert-success">Karyawan berhasil ditambahkan!</div>');
             redirect('employees');
