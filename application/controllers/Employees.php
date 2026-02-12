@@ -15,7 +15,26 @@ class Employees extends CI_Controller {
     public function index() {
         $data['title'] = 'Employees List';
         $data['user'] = $this->db->get_where('users', ['email' => $this->session->userdata('email')])->row_array();
-        $data['employees'] = $this->Employee_model->get_all_employees();
+        
+        // 1. Ambil Parameter Search & Sort
+        $keyword = $this->input->get('search');
+        $sort    = $this->input->get('sort'); // <--- Baru
+
+        // Kirim balik ke view agar input tetap terisi/terpilih
+        $data['search_keyword'] = $keyword;
+        $data['current_sort']   = $sort;     // <--- Baru
+
+        // 2. Ambil Data (Kirim keyword & sort ke model)
+        $data['employees'] = $this->Employee_model->get_all_employees($keyword, $sort);
+
+        // 3. Statistik (Tetap sama)
+        $data['stats'] = [
+            'total'     => $this->Employee_model->count_total(),
+            'active'    => $this->Employee_model->count_active(),
+            'divisions' => $this->Employee_model->count_divisions(),
+            'new_this_month' => $this->db->where('MONTH(hire_date)', date('m'))->where('YEAR(hire_date)', date('Y'))->count_all_results('employees')
+        ];
+
         $this->load->view('employees/index', $data);
     }
 
@@ -48,6 +67,7 @@ class Employees extends CI_Controller {
                 'division'  => htmlspecialchars($this->input->post('division', true)),
                 'hire_date' => $this->input->post('hire_date'),
                 'address'   => htmlspecialchars($this->input->post('address', true)),
+                'status'    => $this->input->post('status'),
                 'created_at'=> date('Y-m-d H:i:s')
             ];
             $this->Employee_model->insert_employee($data_insert);
@@ -84,6 +104,7 @@ class Employees extends CI_Controller {
                 'division'  => htmlspecialchars($this->input->post('division', true)),
                 'hire_date' => $this->input->post('hire_date'),
                 'address'   => htmlspecialchars($this->input->post('address', true)),
+                'status' => $this->input->post('status'),
             ];
             $this->Employee_model->update_employee($id, $data_update);
             $this->session->set_flashdata('message', '<div class="alert alert-success">Data karyawan berhasil diperbarui!</div>');

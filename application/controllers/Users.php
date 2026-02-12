@@ -20,10 +20,30 @@ class Users extends CI_Controller {
         $this->load->library('form_validation');
     }
 
-public function index() {
-        $data['title'] = 'List Users';
+    public function index() {
+        // ... kode proteksi auth & admin ...
+
+        $data['title'] = 'User Management';
         $data['user'] = $this->db->get_where('users', ['email' => $this->session->userdata('email')])->row_array();
-        $data['users_list'] = $this->User_model->get_all_users();
+        
+        // 1. Ambil Parameter
+        $keyword = $this->input->get('search');
+        $sort    = $this->input->get('sort'); // <--- Baru
+
+        $data['search_keyword'] = $keyword;
+        $data['current_sort']   = $sort;      // <--- Baru
+
+        // 2. Ambil Data
+        $data['users_list'] = $this->User_model->get_all_users($keyword, $sort);
+
+        // 3. Statistik
+        $data['stats'] = [
+            'total'  => $this->User_model->count_total(),
+            'active' => $this->User_model->count_active(),
+            'admin'  => $this->User_model->count_by_role('admin'),
+            'staff'  => $this->User_model->count_by_role('staff')
+        ];
+
         $this->load->view('users/index', $data);
     }
 
@@ -55,7 +75,7 @@ public function index() {
         }
     }
 
-public function edit($id) {
+    public function edit($id) {
         $data['title'] = 'Edit User';
         $data['user'] = $this->db->get_where('users', ['email' => $this->session->userdata('email')])->row_array();
         $data['edit_user'] = $this->User_model->get_user_by_id($id);

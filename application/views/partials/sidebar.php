@@ -17,6 +17,13 @@
                     </a>
                 </li>
 
+                <li class="nxl-item <?= ($this->uri->segment(1) == 'projects') ? 'active' : ''; ?>">
+                    <a href="<?= base_url('projects'); ?>" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-layers"></i></span>
+                        <span class="nxl-mtext">Projects</span>
+                    </a>
+                </li>
+                
                 <li class="nxl-item <?= ($this->uri->segment(1) == 'employees') ? 'active' : ''; ?>">
                     <a href="<?= base_url('employees'); ?>" class="nxl-link">
                         <span class="nxl-micon"><i class="feather-users"></i></span>
