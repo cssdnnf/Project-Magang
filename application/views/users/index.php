@@ -110,8 +110,8 @@
                                         </div>
 
                                         <select class="form-select" name="sort" onchange="this.form.submit()" style="min-width: 150px;">
-                                            <option value="newest" <?= ($current_sort == 'newest' || empty($current_sort)) ? 'selected' : ''; ?>>Newest (9-0)</option>
-                                            <option value="oldest" <?= ($current_sort == 'oldest') ? 'selected' : ''; ?>>Oldest (0-9)</option>
+                                            <option value="newest" <?= ($current_sort == 'newest' || empty($current_sort)) ? 'selected' : ''; ?>>Terbaru</option>
+                                            <option value="oldest" <?= ($current_sort == 'oldest') ? 'selected' : ''; ?>>Terlama</option>
                                             <option value="az" <?= ($current_sort == 'az') ? 'selected' : ''; ?>>Username (A-Z)</option>
                                             <option value="za" <?= ($current_sort == 'za') ? 'selected' : ''; ?>>Username (Z-A)</option>
                                         </select>

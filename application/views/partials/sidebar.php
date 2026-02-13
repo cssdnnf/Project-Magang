@@ -46,6 +46,20 @@
                     </a>
                 </li>
 
+                <li class="nxl-item <?= ($this->uri->segment(1) == 'products') ? 'active' : ''; ?>">
+                    <a href="<?= base_url('products'); ?>" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-box"></i></span>
+                        <span class="nxl-mtext">Data Produk</span>
+                    </a>
+                </li>
+
+                <li class="nxl-item <?= ($this->uri->segment(1) == 'suppliers') ? 'active' : ''; ?>">
+                    <a href="<?= base_url('suppliers'); ?>" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-users"></i></span>
+                        <span class="nxl-mtext">Data Kontak</span>
+                    </a>
+                </li>
+
                 <?php if($this->session->userdata('role') == 'admin'): ?>
                 <li class="nxl-item <?= ($this->uri->segment(1) == 'users') ? 'active' : ''; ?>">
                     <a href="<?= base_url('users'); ?>" class="nxl-link">

@@ -30,4 +30,4 @@
     </main>
     <script src="<?= base_url('assets/js/common-init.min.js'); ?>"></script>
 </body>
-</html>
+</html>         

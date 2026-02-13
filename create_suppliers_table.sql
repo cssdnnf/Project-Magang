@@ -1,0 +1,41 @@
+CREATE TABLE IF NOT EXISTS `suppliers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `display_name` varchar(150) NOT NULL,
+  `contact_group` varchar(100) DEFAULT NULL,
+  `first_name` varchar(100) DEFAULT NULL,
+  `middle_name` varchar(100) DEFAULT NULL,
+  `last_name` varchar(100) DEFAULT NULL,
+  `mobile_phone` varchar(20) DEFAULT NULL,
+  `identity_type` varchar(20) DEFAULT 'KTP',
+  `identity_number` varchar(50) DEFAULT NULL,
+  `email` varchar(100) DEFAULT NULL,
+  `info_lain` text,
+  `company_name` varchar(150) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `fax` varchar(20) DEFAULT NULL,
+  `npwp` varchar(50) DEFAULT NULL,
+  `billing_address` text,
+  `shipping_address` text,
+  `receivable_account` varchar(100) DEFAULT NULL,
+  `payable_account` varchar(100) DEFAULT NULL,
+  `is_max_receivable` tinyint(1) DEFAULT '0',
+  `max_receivable_amount` decimal(15,2) DEFAULT '0.00',
+  `is_max_payable` tinyint(1) DEFAULT '0',
+  `max_payable_amount` decimal(15,2) DEFAULT '0.00',
+  `payment_term` varchar(50) DEFAULT 'Net 30',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE IF NOT EXISTS `supplier_bank_accounts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `supplier_id` int(11) NOT NULL,
+  `bank_name` varchar(100) DEFAULT NULL,
+  `branch` varchar(100) DEFAULT NULL,
+  `account_holder` varchar(150) DEFAULT NULL,
+  `account_number` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `supplier_id` (`supplier_id`),
+  CONSTRAINT `fk_supplier_bank` FOREIGN KEY (`supplier_id`) REFERENCES `suppliers` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
