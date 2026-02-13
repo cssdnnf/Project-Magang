@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 12, 2026 at 05:07 AM
+-- Generation Time: Feb 13, 2026 at 04:01 AM
 -- Server version: 10.1.37-MariaDB
 -- PHP Version: 5.6.39
 
@@ -74,8 +74,58 @@ CREATE TABLE `projects` (
 --
 
 INSERT INTO `projects` (`id`, `project_name`, `client_name`, `start_date`, `end_date`, `budget`, `status`, `description`, `progress`, `created_at`) VALUES
-(1, 'Pembangunan Jembatan Puri Beta', 'Jasa Marga', '2026-02-10', '2026-06-30', '5000000000.00', 'Pending', 'Membangun Jembatan Puri Beta Yang Menghubungkan Jalan Ciledug Raya', 0, '2026-02-12 03:44:16'),
-(2, 'Perbaikan Jalan Ciledug Raya', 'Waskita', '2026-02-10', '2026-08-26', '1000000000.00', 'Rejected', 'Perbaiki Jalan Yang Rusak dan Berlobang di sepanjang Jalan Ciledug Raya', 100, '2026-02-12 03:45:42');
+(1, 'Pembangunan Jembatan Puri Beta', 'Jasa Marga', '2026-02-10', '2026-06-30', '3000000000.00', 'Pending', 'Membangun Jembatan Puri Beta Yang Menghubungkan Jalan Ciledug Raya', 0, '2026-02-12 03:44:16'),
+(2, 'Perbaikan Jalan Ciledug Raya', 'Waskita', '2026-02-10', '2026-08-26', '1000000000.00', 'Approved', 'Perbaiki Jalan Yang Rusak dan Berlobang di sepanjang Jalan Ciledug Raya', 100, '2026-02-12 03:45:42');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchase_requests`
+--
+
+CREATE TABLE `purchase_requests` (
+  `id` int(11) NOT NULL,
+  `request_no` varchar(50) NOT NULL,
+  `request_date` date NOT NULL,
+  `department` varchar(100) NOT NULL,
+  `requester_id` int(11) NOT NULL,
+  `notes` text,
+  `status` enum('Pending','Approved','Rejected','Processed') DEFAULT 'Pending',
+  `grand_total` decimal(15,2) DEFAULT '0.00',
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `purchase_requests`
+--
+
+INSERT INTO `purchase_requests` (`id`, `request_no`, `request_date`, `department`, `requester_id`, `notes`, `status`, `grand_total`, `created_at`) VALUES
+(1, 'PR-20260212-085030', '2026-02-12', 'IT', 1, 'Pengadaan Barang', 'Pending', '44800000.00', '2026-02-12 14:52:11');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchase_request_items`
+--
+
+CREATE TABLE `purchase_request_items` (
+  `id` int(11) NOT NULL,
+  `request_id` int(11) NOT NULL,
+  `item_name` varchar(255) NOT NULL,
+  `category` varchar(50) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `unit` varchar(50) NOT NULL,
+  `estimated_price` decimal(15,2) NOT NULL DEFAULT '0.00',
+  `total_price` decimal(15,2) NOT NULL DEFAULT '0.00'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `purchase_request_items`
+--
+
+INSERT INTO `purchase_request_items` (`id`, `request_id`, `item_name`, `category`, `quantity`, `unit`, `estimated_price`, `total_price`) VALUES
+(1, 1, 'Laptop', 'Jasa', 4, 'Unit', '10000000.00', '40000000.00'),
+(2, 1, 'Printer', 'Jasa', 4, 'Unit', '1200000.00', '4800000.00');
 
 -- --------------------------------------------------------
 
@@ -102,7 +152,7 @@ INSERT INTO `users` (`id`, `username`, `email`, `role`, `password`, `is_active`,
 (2, 'user1', 'user1@gmail.com', 'user', '$2y$10$XCGL/xpmM2KCS7B7J9yXiesqgOgHYFveBlJUD0MCeLksX8lsoSBj6', 1, '2026-02-11 08:16:30'),
 (3, 'user2', 'user2@gmail.com', 'user', '$2y$10$mdNXOCve85kR2dRkkHjVsuku3x6n6n/P9f7gJMSYhSwaz4omw6xhG', 1, '2026-02-11 08:28:22'),
 (4, 'user3', 'user3@gmail.com', 'user', '$2y$10$yjDEDzI3cv7SHUpNbLE/P.Ij9bDbNrlSaOFxDvkithCIogrrO8bm.', 1, '2026-02-11 08:28:59'),
-(5, 'user4', 'user4@gmail.com', 'user', '$2y$10$6H1.inY7Ax6OU.OGHuCLuO7eRKA8R1u99D1jZPX1ZT8x6eO8AmmLG', 1, '2026-02-11 08:29:35'),
+(5, 'user4', 'user4@gmail.com', 'user', '$2y$10$6H1.inY7Ax6OU.OGHuCLuO7eRKA8R1u99D1jZPX1ZT8x6eO8AmmLG', 0, '2026-02-11 08:29:35'),
 (6, 'user5', 'user5@gmail.com', 'user', '$2y$10$lQs7qi2T9cGYb/ZuFppAvu.vx371B5BRR6wbiUE9Z4D3BebMwhI2y', 0, '2026-02-11 08:29:50'),
 (7, 'user6', 'user6@gmail.com', 'user', '$2y$10$SnPA7ftmGkVs4v33Nh4oIumNfKLLP3.NT0AFshEXMkkzXQ3.gkTHO', 0, '2026-02-11 08:30:21'),
 (9, 'staff1', 'staff1@gmail.com', 'staff', '$2y$10$yUhlaxsYRfFgIGqa/NL64OwwNSLVz5pNt..QN9BKCCqYTgzsY/s7K', 1, '2026-02-11 09:28:37'),
@@ -124,6 +174,20 @@ ALTER TABLE `employees`
 --
 ALTER TABLE `projects`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `purchase_requests`
+--
+ALTER TABLE `purchase_requests`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `request_no` (`request_no`);
+
+--
+-- Indexes for table `purchase_request_items`
+--
+ALTER TABLE `purchase_request_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `request_id` (`request_id`);
 
 --
 -- Indexes for table `users`
@@ -148,10 +212,32 @@ ALTER TABLE `projects`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT for table `purchase_requests`
+--
+ALTER TABLE `purchase_requests`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `purchase_request_items`
+--
+ALTER TABLE `purchase_request_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `purchase_request_items`
+--
+ALTER TABLE `purchase_request_items`
+  ADD CONSTRAINT `fk_pr_items` FOREIGN KEY (`request_id`) REFERENCES `purchase_requests` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
